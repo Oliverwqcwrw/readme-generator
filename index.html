@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI README Generator — Free GitHub README Maker</title>
+  <meta name="description" content="Generate professional GitHub README files instantly with AI. Free, no signup required. Supports OpenAI, Groq, DeepSeek, and OpenRouter." />
+  <meta name="keywords" content="readme generator, github readme, ai readme, markdown readme, open source readme" />
+  <link rel="canonical" href="https://oliverwqcwrw.github.io/readme-generator/" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "AI README Generator",
+    "url": "https://oliverwqcwrw.github.io/readme-generator/",
+    "description": "Generate professional GitHub README files instantly with AI. Free, no signup required.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; }
+    header { background: #161b22; border-bottom: 1px solid #30363d; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+    header h1 { font-size: 1.4rem; font-weight: 700; color: #f0f6fc; }
+    header .badge { background: #238636; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; }
+    .container { max-width: 960px; margin: 0 auto; padding: 32px 16px; }
+    .subtitle { color: #8b949e; margin-bottom: 28px; font-size: 1rem; }
+    .panel { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 24px; margin-bottom: 20px; }
+    .panel h2 { font-size: 1rem; font-weight: 600; color: #f0f6fc; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .panel h2 .icon { font-size: 1.1rem; }
+    label { display: block; font-size: 0.85rem; color: #8b949e; margin-bottom: 6px; margin-top: 14px; }
+    label:first-child { margin-top: 0; }
+    input, textarea, select { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9; padding: 10px 12px; font-size: 0.9rem; outline: none; transition: border-color 0.2s; font-family: inherit; }
+    input:focus, textarea:focus, select:focus { border-color: #58a6ff; }
+    textarea { resize: vertical; min-height: 90px; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 600px) { .row2 { grid-template-columns: 1fr; } }
+    .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin-top: 8px; }
+    .checkbox-item { display: flex; align-items: center; gap: 8px; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 8px 12px; cursor: pointer; transition: border-color 0.2s; }
+    .checkbox-item:hover { border-color: #58a6ff; }
+    .checkbox-item input[type=checkbox] { width: auto; accent-color: #58a6ff; }
+    .checkbox-item span { font-size: 0.85rem; color: #c9d1d9; }
+    .provider-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 600px) { .provider-row { grid-template-columns: 1fr; } }
+    .btn-primary { background: #238636; color: #fff; border: none; border-radius: 6px; padding: 12px 28px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; width: 100%; margin-top: 8px; }
+    .btn-primary:hover { background: #2ea043; }
+    .btn-primary:disabled { background: #21262d; color: #484f58; cursor: not-allowed; }
+    .output-area { position: relative; }
+    .output-tabs { display: flex; gap: 0; margin-bottom: 0; border-bottom: 1px solid #30363d; }
+    .tab { padding: 8px 18px; cursor: pointer; font-size: 0.85rem; color: #8b949e; border-bottom: 2px solid transparent; transition: color 0.2s; }
+    .tab.active { color: #f0f6fc; border-bottom-color: #58a6ff; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    #output-raw { width: 100%; background: #0d1117; border: none; border-radius: 0 0 8px 8px; color: #c9d1d9; padding: 16px; font-size: 0.85rem; font-family: 'SFMono-Regular', Consolas, monospace; min-height: 320px; resize: vertical; outline: none; }
+    #output-preview { background: #0d1117; border-radius: 0 0 8px 8px; padding: 16px 20px; min-height: 320px; overflow: auto; }
+    .copy-btn { position: absolute; top: 46px; right: 12px; background: #21262d; border: 1px solid #30363d; color: #c9d1d9; padding: 5px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; z-index: 2; }
+    .copy-btn:hover { background: #30363d; }
+    .status { margin-top: 12px; font-size: 0.85rem; color: #8b949e; min-height: 20px; }
+    .status.error { color: #f85149; }
+    .status.success { color: #3fb950; }
+    /* Markdown preview styles */
+    #output-preview h1,#output-preview h2,#output-preview h3 { color: #f0f6fc; margin: 16px 0 8px; border-bottom: 1px solid #21262d; padding-bottom: 6px; }
+    #output-preview p { margin: 8px 0; line-height: 1.6; }
+    #output-preview code { background: #161b22; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.85em; }
+    #output-preview pre { background: #161b22; padding: 12px; border-radius: 6px; overflow: auto; margin: 10px 0; }
+    #output-preview pre code { background: none; padding: 0; }
+    #output-preview ul,#output-preview ol { padding-left: 20px; margin: 8px 0; }
+    #output-preview li { margin: 4px 0; line-height: 1.5; }
+    #output-preview a { color: #58a6ff; text-decoration: none; }
+    #output-preview blockquote { border-left: 3px solid #30363d; padding-left: 12px; color: #8b949e; margin: 8px 0; }
+    #output-preview img { max-width: 100%; }
+    #output-preview table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+    #output-preview th,#output-preview td { border: 1px solid #30363d; padding: 8px 12px; }
+    #output-preview th { background: #161b22; }
+    /* Donation */
+    .donation { text-align: center; margin-top: 40px; padding: 28px; background: #161b22; border: 1px solid #30363d; border-radius: 10px; }
+    .donation h3 { color: #f0f6fc; margin-bottom: 8px; }
+    .donation p { color: #8b949e; font-size: 0.9rem; margin-bottom: 20px; }
+    .qr-row { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+    .qr-card { text-align: center; }
+    .qr-card img { border: 2px solid #30363d; border-radius: 8px; display: block; margin: 0 auto 8px; }
+    .qr-card .chain { font-size: 0.8rem; color: #f85149; font-weight: 700; margin-bottom: 4px; }
+    .qr-card .addr { font-size: 0.68rem; color: #8b949e; word-break: break-all; max-width: 140px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <span style="font-size:1.6rem">📝</span>
+  <h1>AI README Generator</h1>
+  <span class="badge">FREE</span>
+</header>
+
+<div class="container">
+  <p class="subtitle">Generate professional GitHub README files in seconds. Describe your project and let AI craft the perfect documentation.</p>
+
+  <!-- AI Provider Settings -->
+  <div class="panel">
+    <h2><span class="icon">🔑</span> AI Provider</h2>
+    <div class="provider-row">
+      <div>
+        <label>Provider</label>
+        <select id="provider" onchange="updateProviderUI()">
+          <option value="groq">Groq (Free — llama-3.3-70b)</option>
+          <option value="openrouter">OpenRouter (Free — llama-3.3-70b)</option>
+          <option value="deepseek">DeepSeek (deepseek-chat)</option>
+          <option value="openai">OpenAI (gpt-4o-mini)</option>
+        </select>
+      </div>
+      <div>
+        <label>API Key <span id="api-key-hint" style="color:#3fb950;font-size:0.78rem"></span></label>
+        <input type="password" id="api-key" placeholder="Paste your API key here..." oninput="saveKey()" />
+      </div>
+    </div>
+    <p style="font-size:0.78rem;color:#8b949e;margin-top:10px">Keys are stored locally in your browser only. Never sent to our servers.</p>
+  </div>
+
+  <!-- Project Info -->
+  <div class="panel">
+    <h2><span class="icon">📦</span> Project Details</h2>
+    <div class="row2">
+      <div>
+        <label>Project Name *</label>
+        <input type="text" id="proj-name" placeholder="e.g. MyAwesomeApp" />
+      </div>
+      <div>
+        <label>Tagline *</label>
+        <input type="text" id="proj-tagline" placeholder="e.g. A blazing-fast task manager" />
+      </div>
+    </div>
+    <label>Description *</label>
+    <textarea id="proj-desc" placeholder="Describe what your project does, the problem it solves, and who it's for..."></textarea>
+    <div class="row2">
+      <div>
+        <label>Tech Stack</label>
+        <input type="text" id="proj-tech" placeholder="e.g. React, Node.js, PostgreSQL" />
+      </div>
+      <div>
+        <label>GitHub URL (optional)</label>
+        <input type="text" id="proj-url" placeholder="https://github.com/user/repo" />
+      </div>
+    </div>
+    <div class="row2">
+      <div>
+        <label>License</label>
+        <select id="proj-license">
+          <option value="MIT">MIT</option>
+          <option value="Apache 2.0">Apache 2.0</option>
+          <option value="GPL-3.0">GPL-3.0</option>
+          <option value="BSD-3">BSD-3-Clause</option>
+          <option value="ISC">ISC</option>
+          <option value="None">No License</option>
+        </select>
+      </div>
+      <div>
+        <label>Project Stage</label>
+        <select id="proj-stage">
+          <option value="production">Production Ready</option>
+          <option value="beta">Beta</option>
+          <option value="alpha">Alpha / Early Stage</option>
+          <option value="experimental">Experimental</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sections to Include -->
+  <div class="panel">
+    <h2><span class="icon">📋</span> Sections to Include</h2>
+    <div class="checkbox-grid" id="sections-grid">
+      <label class="checkbox-item"><input type="checkbox" value="badges" checked /><span>🏷 Badges</span></label>
+      <label class="checkbox-item"><input type="checkbox" value="features" checked /><span>✨ Features</span></label>
+      <label class="checkbox-item"><input type="checkbox" value="installation" checked /><span>⚙️ Installation</span></label>
+      <label class="checkbox-item"><input type="checkbox" value="usage" checked /><span>🚀 Usage</span></label>
+      <label class="checkbox-item"><input type="checkbox" value="api" /><span>📡 API Reference</span></label>
+      <label class="checkbox-item"><input type="checkbox" value="configuration" /><span>🔧 Configuration</span></label>
+      <label class="checkbox-item"><input type="checkbox" value="contributing" checked /><span>🤝 Contributing</span></label>
+      <label class="checkbox-item"><input type="checkbox" value="testing" /><span>🧪 Testing</span></label>
+      <label class="checkbox-item"><input type="checkbox" value="deployment" /><span>🌐 Deployment</span></label>
+      <label class="checkbox-item"><input type="checkbox" value="roadmap" /><span>🗺 Roadmap</span></label>
+      <label class="checkbox-item"><input type="checkbox" value="changelog" /><span>📝 Changelog</span></label>
+      <label class="checkbox-item"><input type="checkbox" value="license" checked /><span>📄 License</span></label>
+      <label class="checkbox-item"><input type="checkbox" value="acknowledgements" /><span>🙏 Acknowledgements</span></label>
+      <label class="checkbox-item"><input type="checkbox" value="faq" /><span>❓ FAQ</span></label>
+    </div>
+  </div>
+
+  <button class="btn-primary" id="gen-btn" onclick="generate()">✨ Generate README</button>
+  <div class="status" id="status"></div>
+
+  <!-- Output -->
+  <div class="panel output-area" id="output-panel" style="display:none;margin-top:20px">
+    <div class="output-tabs">
+      <div class="tab active" onclick="switchTab('raw')">Markdown</div>
+      <div class="tab" onclick="switchTab('preview')">Preview</div>
+    </div>
+    <button class="copy-btn" onclick="copyOutput()">Copy</button>
+    <div class="tab-content active" id="tab-raw">
+      <textarea id="output-raw" readonly></textarea>
+    </div>
+    <div class="tab-content" id="tab-preview">
+      <div id="output-preview"></div>
+    </div>
+  </div>
+
+  <!-- Donation -->
+  <div class="donation">
+    <h3>☕ Support This Project</h3>
+    <p>If this tool saved you time, consider buying me a coffee. 100% free, no ads, no tracking.</p>
+    <div class="qr-row">
+      <div class="qr-card">
+        <div class="chain">USDT TRC-20</div>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=TSvC67jexputnNHayVR8fpScwFmwvZV8jp" alt="USDT QR" width="110" height="110" />
+        <div class="addr">TSvC67jexputnNHayVR8fpScwFmwvZV8jp</div>
+      </div>
+      <div class="qr-card">
+        <div class="chain" style="color:#7c3aed">ETH ERC-20</div>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=0x11e764fac3fcd4be16da43a252a62b156e06a632" alt="ETH QR" width="110" height="110" />
+        <div class="addr">0x11e764fac3fcd4be16da43a252a62b156e06a632</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- marked.js for preview -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+const PROVIDERS = {
+  groq:       { url: 'https://api.groq.com/openai/v1/chat/completions',          model: 'llama-3.3-70b-versatile' },
+  openrouter: { url: 'https://openrouter.ai/api/v1/chat/completions',             model: 'meta-llama/llama-3.3-70b-instruct:free' },
+  deepseek:   { url: 'https://api.deepseek.com/v1/chat/completions',              model: 'deepseek-chat' },
+  openai:     { url: 'https://api.openai.com/v1/chat/completions',                model: 'gpt-4o-mini' },
+};
+
+function updateProviderUI() {
+  const p = document.getElementById('provider').value;
+  const hints = { groq: '(free tier available)', openrouter: '(free tier available)', deepseek: '(very affordable)', openai: '(requires paid key)' };
+  document.getElementById('api-key-hint').textContent = hints[p] || '';
+  const saved = localStorage.getItem('rg_key_' + p) || '';
+  document.getElementById('api-key').value = saved;
+}
+function saveKey() {
+  const p = document.getElementById('provider').value;
+  localStorage.setItem('rg_key_' + p, document.getElementById('api-key').value);
+}
+function getSelectedSections() {
+  return [...document.querySelectorAll('#sections-grid input[type=checkbox]:checked')].map(c => c.value);
+}
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='raw')||(i===1&&tab==='preview')));
+  document.getElementById('tab-raw').classList.toggle('active', tab==='raw');
+  document.getElementById('tab-preview').classList.toggle('active', tab==='preview');
+  if (tab === 'preview') {
+    document.getElementById('output-preview').innerHTML = marked.parse(document.getElementById('output-raw').value);
+  }
+}
+function copyOutput() {
+  const txt = document.getElementById('output-raw').value;
+  navigator.clipboard.writeText(txt).then(() => { const b = document.querySelector('.copy-btn'); b.textContent = 'Copied!'; setTimeout(() => b.textContent = 'Copy', 1800); });
+}
+function setStatus(msg, type='') {
+  const s = document.getElementById('status');
+  s.textContent = msg;
+  s.className = 'status ' + type;
+}
+
+async function generate() {
+  const name = document.getElementById('proj-name').value.trim();
+  const tagline = document.getElementById('proj-tagline').value.trim();
+  const desc = document.getElementById('proj-desc').value.trim();
+  if (!name || !tagline || !desc) { setStatus('Please fill in Project Name, Tagline, and Description.', 'error'); return; }
+  const provider = document.getElementById('provider').value;
+  const apiKey = document.getElementById('api-key').value.trim();
+  if (!apiKey) { setStatus('Please enter your API key.', 'error'); return; }
+
+  const tech = document.getElementById('proj-tech').value.trim();
+  const url = document.getElementById('proj-url').value.trim();
+  const license = document.getElementById('proj-license').value;
+  const stage = document.getElementById('proj-stage').value;
+  const sections = getSelectedSections();
+
+  const sectionList = sections.map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(', ');
+
+  const systemPrompt = `You are an expert technical writer specializing in GitHub README files. 
+Generate a professional, well-structured README.md in Markdown format.
+Use appropriate emojis for section headers. 
+Include shields.io badges where relevant (use placeholder values if specific data unknown).
+Make the README engaging, clear, and developer-friendly.
+Do NOT include any commentary or explanation — output only the raw Markdown.`;
+
+  const userPrompt = `Create a complete README.md for the following project:
+
+**Project Name:** ${name}
+**Tagline:** ${tagline}
+**Description:** ${desc}
+**Tech Stack:** ${tech || 'Not specified'}
+**GitHub URL:** ${url || 'Not provided'}
+**License:** ${license}
+**Project Stage:** ${stage}
+
+**Include these sections:** ${sectionList}
+
+Generate a professional, complete README.md with all the requested sections filled in with realistic, helpful content based on the project description.`;
+
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Generating...';
+  setStatus('Connecting to AI provider...', '');
+
+  try {
+    const cfg = PROVIDERS[provider];
+    const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` };
+    if (provider === 'openrouter') headers['HTTP-Referer'] = 'https://oliverwqcwrw.github.io/readme-generator/';
+
+    const res = await fetch(cfg.url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        model: cfg.model,
+        messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }],
+        max_tokens: 3000,
+        temperature: 0.7,
+      })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err?.error?.message || `HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    const md = data.choices?.[0]?.message?.content?.trim() || '';
+    if (!md) throw new Error('Empty response from AI');
+
+    document.getElementById('output-raw').value = md;
+    document.getElementById('output-panel').style.display = 'block';
+    setStatus('✅ README generated successfully!', 'success');
+    document.getElementById('output-panel').scrollIntoView({ behavior: 'smooth' });
+  } catch(e) {
+    setStatus('Error: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '✨ Generate README';
+  }
+}
+
+updateProviderUI();
+</script>
+</body>
+</html>
